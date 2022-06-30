@@ -23,6 +23,25 @@
     // 创建组件
     class Count extends React.Component {
 
+      /*
+        1. 初始化阶段: 由ReactDOM.render()触发---初次渲染
+                1.	constructor()
+                2.	getDerivedStateFromProps 
+                3.	render()
+                4.	componentDidMount()   =====> 常用
+                  一般在这个钩子里面做初始化的事。例如：开启定时器，发起网络请求，订阅消息
+        2. 更新阶段: 由组件内部this.setSate()或父组件重新render触发
+                1.	getDerivedStateFromProps
+                2.	shouldComponentUpdate()
+                3.	render()    =====> 必用，必须使用的一个render
+                4.	getSnapshotBeforeUpdate
+                5.	componentDidUpdate()
+        3. 卸载组件: 由ReactDOM.unmountComponentAtNode()触发
+                1.	componentWillUnmount() =====> 常用
+                    一般在这个钩子中做一些收尾事，例如：关闭定时器、取消订阅消息
+
+      */
+
       // 构造器
       constructor(props) {
         console.log('Count-constructor');
@@ -52,10 +71,17 @@
       force = () => { 
         this.forceUpdate()
       }
+      
+      // 若state的值在任何时候都取决于props，那么可以使用getDerivedStateFromProps
+      static getDerivedStateFromProps(props, state) {
+        console.log('Count--getDerivedStateFromProps',props, state)
+        return null
+      }
 
-      // 组件将要挂载的钩子
-      componentWillMount() {
-        console.log('Count-componentWillMount');
+      // 在更新之前获取快照
+      getSnapshotBeforeUpdate() {
+        console.log('count--getSnapshotBeforeUpdate')
+        return "atguigu"
       }
 
       // 组件挂载完毕的钩子
@@ -74,14 +100,9 @@
         return true
       }
 
-      // 组件即将更新的钩子
-      componentWillUpdate() {
-        console.log('Count-componentWillUpdate');
-      }
-
       // 组件更新完毕的钩子
-      componentDidUpdate() {
-        console.log('Count-componentDidUpdate');
+      componentDidUpdate(preProps, preState, snapshotValue) {
+        console.log('Count-componentDidUpdate', preProps, preState, snapshotValue);
       }
 
       render() {
@@ -96,50 +117,9 @@
           </div>
         )
       }
-    }
-    
-    // 父组件A
-    class A extends React.Component {
-      state = {
-        carName: '奔驰'
-      }
-
-      changeCar = () => {
-        this.setState({
-          carName: '奥托'
-        })
-      }
-
-      render() {
-        return (
-          <div>
-            <div>我是A组件</div>
-            <button onClick={this.changeCar}>换车</button>
-            <B carName={this.state.carName}/>  
-          </div>
-        )
-      }
-    }
-
-    // 子组件B
-    class B extends React.Component {
-      // 组件将要接收新的props的钩子
-      componentWillReceiveProps(props){
-        console.log('B--componentWillReceiveProps', props);
-      }
-
-      render() {
-        console.log('B-render');
-        return (
-          <div>
-            我是B组件，接收到的车是：{ this.props.carName }
-          </div>
-        )
-      }
-    }
-    
+    }    
     // 渲染组件
-    ReactDOM.render(<Count/>, document.getElementById("test"))
+    ReactDOM.render(<Count count={199}/>, document.getElementById("test"))
   </script>
 </body>
 </html>
