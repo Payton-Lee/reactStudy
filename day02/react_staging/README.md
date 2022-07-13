@@ -105,3 +105,23 @@ match:
 
 2.Switch可以提高路由匹配效率（单一匹配）
 
+## 七、解决多级路径刷新页面样式丢失的问题
+1. public/index.html 中 引入样式时不写 ./ 写 / (常用)
+2. public/index.html 中 引入样式时不写 ./ 写 %PUBLIC_URL% (常用)
+3. 使用HashRouter
+
+## 八、路由的严格匹配与模糊匹配
+1. 默认使用的是模糊匹配(简单记： 【输入的路径】必须要包含【匹配的路径】， 而且顺序要一致)
+2. 开启严格匹配：<Route exact={true} path="/about" component={About} /> (直接写exact也可以)
+3. 严格匹配不要随便开启，需要时再打开，有些时候开启会导致无法继续匹配二级路由
+
+## 九、Redirect的使用
+1. 一般卸载所有路由注册的最下方，当所有的路由都无法匹配时，跳转到Redirect指定的路由
+2. 具体编码：
+      ```js
+      <Switch>
+            <Route path="/about" component={About} />
+            <Route path="/home" component={Home} />
+            <Redirect to="/about"/>
+      </Switch>
+      ```
