@@ -18,11 +18,11 @@
               const { a: {b} } = obj // 连续解构赋值
               const { a: {b: value}} = obj // 连续解构赋值 + 重命名
         ```
- 3. 消息订阅于发布机制
+3. 消息订阅于发布机制
         1. 先订阅，在发布 (理解，有一种隔空对话)
         2. 适用于任意组件间通讯
         3. 要在组件的componentWillUnmount中取消订阅
- 4. fetch发送请求(关注分离的设计思想)
+4. fetch发送请求(关注分离的设计思想)
         ```js
         try {
               const response = await fetch(`https://api.github.com/search/users?q=${keyWord}`)
@@ -125,3 +125,23 @@ match:
             <Redirect to="/about"/>
       </Switch>
       ```
+
+## 十、嵌套路由
+1. 注册子路由时要协商父级路由的path值
+2. 路由的匹配是按照注册路由的顺序进行的
+
+## 十一、向路由组件传递参数
+1. params参数
+      路由链接(携带参数): <Link to='/demo/test/tom/18'>详情</Link>
+      注册路由(声明接收): <Route path='/demo/test/:name/:age' component={Test}>
+      接收参数: const { name, age } = this.props.match.params
+2. 传递search参数
+      路由链接(携带参数): <Link to='/demo/test/name=tom&age=18'>详情</Link>
+      注册路由(无需声明，正常注册即可): <Route path='/demo/test' component={Tets}>
+      接收参数: this.props.location.search
+      备注: 获取到的search时urlencoded编码字符串，需要借助query-string解析
+3. state参数
+      路由链接(携带参数): <Link to={{ pathname: '/demo/test', state: {name: 'tom', age: 18 }}}>详情</Link>
+      注册路由(无需声明，正常注册即可): <Route path='/demo/test' component={Tets}>
+      接收参数: this.props.location.state
+      备注: 刷新也可以保留住参数
