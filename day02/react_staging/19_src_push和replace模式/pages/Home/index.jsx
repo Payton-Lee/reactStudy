@@ -13,10 +13,10 @@ export default class Home extends Component {
         <div>
           <ul className="nav nav-tabs">
             <li>
-              <MyNavLink to='/home/news'>News</MyNavLink>
+              <MyNavLink replace to='/home/news'>News</MyNavLink>
             </li>
             <li>
-              <MyNavLink to="/home/message">Message</MyNavLink>
+              <MyNavLink replace to="/home/message">Message</MyNavLink>
             </li>
           </ul>
           {/* 注册路由 */}

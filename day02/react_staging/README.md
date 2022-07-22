@@ -145,3 +145,66 @@ match:
       注册路由(无需声明，正常注册即可): <Route path='/demo/test' component={Tets}>
       接收参数: this.props.location.state
       备注: 刷新也可以保留住参数
+
+## 十二、编程式路由导航
+借助`this.props.history`对象上面的API对操作路由跳转、前进、后退
+      `-this.props.history.push()`
+      `-this.props.history.replace()`
+      `-this.props.history.goBack()`
+      `-this.props.history.goForward()`
+      `-this.props.history.go()`
+
+## 十三、BrowserRouter和HashRouter的区别
+1. 底层原理不一样：
+      BrowserRouter使用的是H5的history API， 不兼容IE9及以下版本
+      HashRouter使用的是URL的哈希值
+2. path表现形式不一样
+      BrowserRouter的路径中没有#，例如localhost:3000/demo/test
+      HashRouter的路径包含#，例如localhost:3000/#/demo/test
+3. 刷新后对路由state参数的影响
+      (1) BrowserRouter没有任何影响，因为state保存在history对象中
+      (2) HashRouter刷新后会导致路由state参数的丢失！！！
+4. 备注：HashRouter可以用于解决一些路径错误相关的问题
+
+## 十四、antd的按需引入+自定义主题
+1. 安装依赖：
+```shell
+yarn add react-app-rewired customize-cra babel-plugin-import less less-loader
+```
+2. 修改package.json
+```json
+"scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject"
+},
+```
+3. 根目录下面创建config-overrides.js
+```js
+// 配置具体的修改规则
+const { override, fixBabelImports, addLessLoader, adjustStyleLoaders } = require('customize-cra');
+
+module.exports = override(
+  fixBabelImports('import', {
+    libraryName: 'antd',
+    libraryDirectory: 'es',
+    style: true
+  }),
+  addLessLoader({
+    lessOptions: {
+      javascriptEnabled: true,
+      modifyVars: { '@primary-color': 'orange' },
+    }
+  }),
+  adjustStyleLoaders(({ use: [, , postcss] }) => {
+    const postcssOptions = postcss.options;
+    postcss.options = { postcssOptions };
+  })
+);
+```
+4. 备注：不用在组件里面亲自引入样式了，即：
+```js
+import 'antd/dist/antd.css'
+```
+应该删掉
