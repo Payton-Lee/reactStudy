@@ -1,12 +1,4 @@
 import React, { Component } from 'react'
-// 引入store，用于获取redux中的状态
-import store from '../../redux/store'
-// 引入actionCreator，专门用于创建action对象
-import {
-  createIncrementAsyncAction,
-  createIncrementAction,
-  createDecrementAction
-} from '../../redux/count_action'
 export default class Count extends Component {
 
 
@@ -19,34 +11,31 @@ export default class Count extends Component {
 
   increment = () => {
     const { value } = this.selectedNumber
-    store.dispatch(createIncrementAction(value * 1))
+    this.props.jia(value * 1)
   }
   decrement = () => {
     const { value } = this.selectedNumber
-    store.dispatch(createDecrementAction(value * 1))
+    this.props.jian(value * 1)
   }
 
   // 奇数再加
   incrementIfOdd = () => {
     const { value } = this.selectedNumber
-    const count = store.getState()
-    if (count % 2 !== 0) {
-      store.dispatch(createIncrementAction(value * 1))
+    if (this.props.count % 2 !== 0) {
+      this.props.jia(value * 1)
     }
   }
 
   // 异步加
   incrementAsync = () => {
     const { value } = this.selectedNumber
-    // setTimeout(() => {
-    store.dispatch(createIncrementAsyncAction(value * 1, 1000))
-    // }, 500)
+    this.props.jiaAsync(value * 1, 500)
   }
 
   render() {
     return (
       <div>
-        <h1>当前求和为：{store.getState()}</h1>
+        <h1>当前求和为：{this.props.count}</h1>
         <select ref={c => this.selectedNumber = c}>
           <option value="1">1</option>
           <option value="2">2</option>
