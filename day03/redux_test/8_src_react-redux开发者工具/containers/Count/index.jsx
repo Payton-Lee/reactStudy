@@ -6,9 +6,9 @@ import { connect } from 'react-redux'
 
 // 引入action对象
 import {
-  increment,
-  decrement,
-  incrementAsync
+  createIncrementAction,
+  createDecrementAction,
+  createIncrementAsyncAction
 } from '../../redux/actions/count'
 
 // 定义ui组件
@@ -24,33 +24,32 @@ class Count extends Component {
 
   increment = () => {
     const { value } = this.selectedNumber
-    this.props.increment(value * 1)
+    this.props.jia(value * 1)
   }
   decrement = () => {
     const { value } = this.selectedNumber
-    this.props.increment(value * 1)
+    this.props.jian(value * 1)
   }
 
   // 奇数再加
   incrementIfOdd = () => {
     const { value } = this.selectedNumber
     if (this.props.count % 2 !== 0) {
-      this.props.increment(value * 1)
+      this.props.jia(value * 1)
     }
   }
 
   // 异步加
   incrementAsync = () => {
     const { value } = this.selectedNumber
-    this.props.incrementAsync(value * 1, 500)
+    this.props.jiaAsync(value * 1, 500)
   }
 
   render() {
-    const { count, personCount } = this.props
     return (
       <div>
-        <h2>我是Count组件, 下方组件总人数为：{personCount}</h2>
-        <h4>当前求和为：{count}</h4>
+        <h2>我是Count组件, 下方组件总人数为：{this.props.renshu}</h2>
+        <h4>当前求和为：{this.props.count}</h4>
         <select ref={c => this.selectedNumber = c}>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -68,22 +67,19 @@ class Count extends Component {
 
 // 使用connect()()创建并暴露一个Count容器组件
 export default connect(
-  state => ({
-    count: state.count,
-    personCount: state.person.length
-  }),
+  state => ({ count: state.he, renshu: state.rens.length }),
   // mapDispatchToProps的一般写法
   /* dispatch => ({
     // 通知redux执行加法
-    increment: number => dispatch(increment(number)),
-    incrementn: number => dispatch(decrement(number)),
-    incrementAsync: (number, time) => dispatch(incrementAsync(number, time))
+    jia: number => dispatch(createIncrementAction(number)),
+    jian: number => dispatch(createDecrementAction(number)),
+    jiaAsync: (number, time) => dispatch(createIncrementAsyncAction(number, time))
   }) */
   // mapDispatchToProps的简写
   {
-    increment,
-    decrement,
-    incrementAsync
+    jia: createIncrementAction,
+    jian: createDecrementAction,
+    jiaAsync: createIncrementAsyncAction
   }
 )(Count)
 
